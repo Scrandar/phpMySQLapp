@@ -1,0 +1,23 @@
+services:
+  MySqlDB:
+    image: mysql
+    container_name: MySqlDB
+    volumes:
+      -./MySqlDB:/mysql-init.db:ro
+    hostname: MySqlDB
+    environment:
+      - Root_Password: admin
+  Webserver:
+    image: apache2
+    container_name: Webserver
+    volumes:
+      -admin_area:
+      -books:
+      -movies:
+      -siteImages:
+      -index.php:
+    environment:
+      - name=value
+    hostname: Webserver
+    ports:
+      -"80:80"
