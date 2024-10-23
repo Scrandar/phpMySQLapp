@@ -1,23 +1,18 @@
+version: '3'
 services:
-  MySqlDB:
-    image: mysql
-    container_name: MySqlDB
-    volumes:
-      -./MySqlDB:/mysql-init.db:ro
-    hostname: MySqlDB
+  siteDB:
+    image: mysql:8.0.39
+    container_name: siteDB
     environment:
-      - Root_Password: admin
-  Webserver:
-    image: apache2
-    container_name: Webserver
+      MYSQL_ROOT_PASSWORD: admin
     volumes:
-      -admin_area:
-      -books:
-      -movies:
-      -siteImages:
-      -index.php:
-    environment:
-      - name=value
-    hostname: Webserver
+      - ./sql:/docker-entrypoint-initdb.d/:ro
+    hostname: siteDB
+  webserver:
+    image: sohmc/php-mysqli:8.3.11-apache
+    # build: ./src
+    container_name: webserver
+    volumes:
+      - ./src:/var/www/html:ro
     ports:
-      -"80:80"
+      - "80:80"
